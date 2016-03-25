@@ -1,23 +1,27 @@
-#!/bin/env python
+#!/usr/bin/env python
 #-*- coding:utf-8 -*-
-#
+
 import platform
 import util.common.stringutil as su
 
 WINDOWS='WIN'
 LINUX='LINUX'
 CYGWIN='CYGWIN'
+MAC='DARWIN'
 
 def getOS():
-    osname = platform.system()
-    osname = osname.upper()
+    osname = platform.system().upper()
+    # print osname
     if su.startWith(osname,WINDOWS):
         return WINDOWS
     elif su.startWith(osname,LINUX):
         return LINUX
     elif su.startWith(osname,CYGWIN):
         return CYGWIN
+    elif su.startWith(osname,MAC):
+        return MAC
 
+# print getOS()
 
 
 '''

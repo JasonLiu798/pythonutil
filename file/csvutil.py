@@ -25,3 +25,13 @@ cu = Csvutil(filename)
 res = cu.read()
 print res
 '''
+
+def parseSSH(csvfile):
+    cu = Csvutil(csvfile)
+    res = cu.read()
+    return res
+
+
+
+
+

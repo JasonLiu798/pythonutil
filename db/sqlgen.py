@@ -1,6 +1,9 @@
 #!/bin/env python
 #-*- coding:utf-8 -*-
 
+'''
+pip install sqlparse
+'''
 import sqlparse
 import util.log.logger as logger
 
@@ -43,18 +46,35 @@ def generateMultiTabOneTab(sql,tabnames,tabnum=10,fmt='N',logEnable=True):
 def generateMultiTab(sql,tabnames=[],tabnum=10,fmt='N',logEnable=True):
     tokens = getTokens(sql)
     if logEnable:
-        log.debug('token %s' % tokens)
+        printStr=''
+        for t in tokens:
+            printStr+= str(t)+','
+        log.debug('token %s' % printStr)
     res=''
+    tableNames = getTableName(tokens)
+
     if len(tokens)>0:
         pre = None
         idx=0
         for i in range(1,tabnum+1):
             for t in tokens:
-                if str(pre) == 'FROM' or str(pre) =='JOIN':
-                    t='%s_%s'%(t,i)
+                tStr = str(t)
+                # print '---',tStr
+                tableNameAlias = tableNames.get(tStr)
+                if isinstance(tableNameAlias,str):
+                    t ='%s_%s'%(t,i)
+                elif isinstance(tableNameAlias,list):
+                    # t ='%s_%s %s_%s'%(tableNameAlias[0],i,tableNameAlias[1],i)
+                    t ='%s_%s %s'%(tableNameAlias[0],i,tableNameAlias[1])
+                #else:#dict not get,other tokens
+                    #if
+
+                # if '.' in tStr:
+                    # sep = tStr.split('.')
+                    # t = '%s_%s.%s' % (sep[0],i,sep[1])
                 # log.debug('pre %s,now %s' %(pre,t))
-                pre = t
-                idx+=1
+                # pre = t
+                # idx+=1
                 res+='%s '% t
             if i!=tabnum:
                 res+='union all'
@@ -64,7 +84,24 @@ def generateMultiTab(sql,tabnames=[],tabnum=10,fmt='N',logEnable=True):
     return res
 
 
+def getTableName(tokens):
+    pre = None
+    tableNames={}
+    for t in tokens:
+        if str(pre) == 'FROM' or str(pre) =='JOIN': #or tablesNames.get(str(pre)) !=None:
+            tmp = str(t).split(" ")
+            if len(tmp)>1:
+                tableNames[str(t)]=tmp
+            else:
+                tableNames[str(t)]=''
+        # log.debug('pre %s,now %s' %(pre,t))
+        pre = t
+    return tableNames
+
 # res = generateMultiTab(sql,10)
 # print 'res\n',res
+
+# if "." in "aaa.dsf":
+#     print 'in'
 
 

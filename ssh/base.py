@@ -29,11 +29,7 @@ def ssh_cmd(ip, user, passwd, cmd):
     ssh.close()
     return r
 
-hosts = '''
-dp113 192.168.143.79 22 guest guest
-'''
-#dm118 192.168.143.118 22 work work
-#192.168.1.12:root:1357924680:df -h,uptime
+#name ip port user pass
 for host in hosts.split("\n"):
     if host:
         name, ip, port, user, passwd = host.split(" ")

@@ -17,6 +17,8 @@
 # under the License.
 
 """
+easy_install mysql-connector-python
+
 A lightweight wrapper around mysql-connector
 """
 
@@ -590,9 +592,15 @@ IntegrityError = MySQLdb.IntegrityError
 OperationalError = Exception#'OperationalError'#MySQLdb.OperationalError
 
 
-def csv2conns(csvfile):
+def csv2connlist(csvfile):
     cu = Csvutil(csvfile)
     rawdata = cu.read()
+    if len(rawdata)<=0:
+        raise Exception,'db csv null'
+    return rawdata
+
+def csv2conns(csvfile):
+    rawdata = csv2connlist(csvfile)
     if len(rawdata)<=0:
         raise Exception,'db csv null'
     res = {}
