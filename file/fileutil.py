@@ -81,7 +81,7 @@ def getfd(file,otype='r'):
     file_object = open(file,otype)
     return file_object #don't forget close
 
-
+# otype = 'a'
 def write(file,content,otype='w',length=-1):
     # checkFile(file)
     file_object = open(file, otype)

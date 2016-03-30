@@ -26,12 +26,27 @@ res = cu.read()
 print res
 '''
 
-def parseSSH(csvfile):
+sshcsv = '/opt/vm/share/csv/server.csv'
+dbcsv = '/opt/vm/share/csv/db.csv'
+rediscsv = '/opt/vm/share/csv/redis.csv'
+
+
+def parseRedis():
+    return parseRaw(rediscsv)
+
+def parseDb():
+    return parseRaw(dbcsv)
+
+def parseSSH(tgt='dict'):
+    servers = parseRaw(sshcsv)
+    res = {}
+    for s in servers:
+        res[s['key']]=s
+    return res
+
+def parseRaw(csvfile):
     cu = Csvutil(csvfile)
     res = cu.read()
     return res
-
-
-
 
 
