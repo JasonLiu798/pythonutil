@@ -31,9 +31,8 @@ import mysql.connector as mysql
 import itertools
 import logging
 from time import time
-from util.file.csvutil import *
-
-
+#from util.file.csvutil import *
+import util.file.csvutil as cu
 
 
 class Connection(object):
@@ -77,12 +76,13 @@ class Connection(object):
 
         self._db = None
         self._db_args = args
+        '''
         try:
             self.reconnect()
         except:
             logging.error("Cannot connect to MySQL on %s", self.host,
                           exc_info=True)
-
+        '''
     def __del__(self):
         self.close()
 
@@ -152,6 +152,38 @@ class Connection(object):
             raise Exception("Multiple rows returned for Database.get() query")
         else:
             return rows[0]
+
+    def queryf(self,query,*parameters):
+        return self.format(self.query(query,*parameters))
+
+    def batchQueryf(self,querys):
+        res=''
+        for q in querys:
+            res +=self.queryf(q)
+        return res
+
+
+    def format(self,inputdata):
+        res = ''
+        # print inputdata
+        if inputdata:
+            if len(inputdata)>=1:
+                keys = inputdata[0].keys()
+                #print 'keys',keys
+                maxLen = 0
+                for k in keys:
+                    if len(k)>maxLen:
+                        maxLen = len(k)
+                for d in inputdata:
+                    # print 'data',d
+                    for k in d.keys():
+                        content =  str(d.get(k))
+                        if len(k)<maxLen:
+                            for i in range(len(k), maxLen ):
+                                k+=' '
+                        res+= str(k)+":"+content+"\n"
+                    res+= '------------------------------\n'
+        return res
 
     def execute(self, query, *parameters):
         """Executes the given query, returning the lastrowid from the query."""
@@ -591,23 +623,6 @@ IntegrityError = MySQLdb.IntegrityError
 
 OperationalError = Exception#'OperationalError'#MySQLdb.OperationalError
 
-
-def csv2connlist(csvfile):
-    cu = Csvutil(csvfile)
-    rawdata = cu.read()
-    if len(rawdata)<=0:
-        raise Exception,'db csv null'
-    return rawdata
-
-def csv2conns(csvfile):
-    rawdata = csv2connlist(csvfile)
-    if len(rawdata)<=0:
-        raise Exception,'db csv null'
-    res = {}
-    for rd in rawdata:
-        conn = Connection(host=rd['ip'],database=rd['db'],user=rd['user'],password=rd['password'])
-        res[rd['key']] = conn
-    return res
 
 '''
 filename='D:\\yp\\project\\python\\data\\db.csv'

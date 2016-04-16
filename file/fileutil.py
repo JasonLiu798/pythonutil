@@ -10,7 +10,6 @@ log = logger.Logger(loglevel=1, logger="stdout").getlog()
 T_WR_APPEND='a'
 
 
-
 # def getSep(ost):
     # if ost
 
@@ -26,9 +25,9 @@ def cur_file_dir():
 
 def checkFile(file):
     if not exist(file):
-        raise Exception,'file not exist'
+        raise Exception,file+'file not exist'
     if not isFile(file):
-        raise Exception,'not a file'
+        raise Exception,file+'not a file'
 
 def checkDir(directory):
     if not exist(directory):

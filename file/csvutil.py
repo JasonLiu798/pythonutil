@@ -2,6 +2,9 @@
 # -*- coding:utf-8 -*-
 
 import csv
+import util.common.systemutil as su
+import util.log.logger as logger
+log = logger.Logger(loglevel=1, logger="stdout").getlog()
 
 class Csvutil(object):
     filename=''
@@ -19,15 +22,27 @@ class Csvutil(object):
                     tmp[h]=l
                 res.append(tmp)
         return res
+
 '''
 filename = 'C:\\Users\\Administrator\\Desktop\\a.csv'
 cu = Csvutil(filename)
 res = cu.read()
 print res
 '''
+#profiles
+OL='ol'
+LC='lc'
+#ssh csv file
+sshLocalCsv = '/opt/vm/share/csv/server.csv'
+sshOlCsv = '/opt/vm/share/csv/serverol.csv'
 
-sshcsv = '/opt/vm/share/csv/server.csv'
-dbcsv = '/opt/vm/share/csv/db.csv'
+#db csv file
+macdbcsv = '/opt/vm/share/csv/db.csv'
+
+windbcsv = ''
+
+
+# winDbCSV = 'D:'+os.sep+
 rediscsv = '/opt/vm/share/csv/redis.csv'
 
 
@@ -35,14 +50,31 @@ def parseRedis():
     return parseRaw(rediscsv)
 
 def parseDb():
+    ostype = su.getOS()
+    dbcsv = macdbcsv
+    if ostype==su.WINDOWS:
+        dbcsv = windbcsv
+        raise Exception,'no win file'
     return parseRaw(dbcsv)
 
-def parseSSH(tgt='dict'):
-    servers = parseRaw(sshcsv)
-    res = {}
-    for s in servers:
-        res[s['key']]=s
-    return res
+def parseSSH(profile=None):
+    csvfile=None
+    if profile==None:
+        profile=LC
+    if profile==OL:
+        csvfile=sshOlCsv
+    elif profile==LC:
+        csvfile=sshLocalCsv
+    if csvfile:
+        servers = parseRaw(csvfile)
+        print servers
+        res = {}
+        for s in servers:
+            res[s['key']]=s
+        return res
+    else:
+        log.error('parse ssh file fail')
+        return None
 
 def parseRaw(csvfile):
     cu = Csvutil(csvfile)
