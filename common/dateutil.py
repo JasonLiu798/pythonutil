@@ -7,106 +7,93 @@ import calendar
 '''
 data formmats
 '''
+YYYY_MM_DD_UL="%Y_%m_%d"
+YYYY_MM_DD_HH_UL="%Y_%m_%d-%H"
 YYYY_MM_DD_HH_MM_SS="%Y-%m-%d %H:%M:%S"
+YYYY_MM_DD_HH_MM_SS_UL="%Y_%m_%d-%H_%M_%S"
 
 def day_get(d):
-   oneday = datetime.timedelta(days = 1 )
-   day = d - oneday
-   date_from = datetime.datetime(day.year, day.month, day.day, 0 , 0 , 0 )
-   date_to = datetime.datetime(day.year, day.month, day.day, 23 , 59 , 59 )
-   print '---' .join([ str (date_from), str (date_to)])
+	oneday = datetime.timedelta(days = 1 )
+	day = d - oneday
+	date_from = datetime.datetime(day.year, day.month, day.day, 0 , 0 , 0 )
+	date_to = datetime.datetime(day.year, day.month, day.day, 23 , 59 , 59 )
+	print '---' .join([ str (date_from), str (date_to)])
 
 
 def week_get(d):
-   dayscount = datetime.timedelta(days = d.isoweekday())
-   dayto = d - dayscount
-   sixdays = datetime.timedelta(days = 6 )
-   dayfrom = dayto - sixdays
-   date_from = datetime.datetime(dayfrom.year, dayfrom.month, dayfrom.day, 0 , 0 , 0 )
-   date_to = datetime.datetime(dayto.year, dayto.month, dayto.day, 23 , 59 , 59 )
-   print '---' .join([ str (date_from), str (date_to)])
+	dayscount = datetime.timedelta(days = d.isoweekday())
+	dayto = d - dayscount
+	sixdays = datetime.timedelta(days = 6 )
+	dayfrom = dayto - sixdays
+	date_from = datetime.datetime(dayfrom.year, dayfrom.month, dayfrom.day, 0 , 0 , 0 )
+	date_to = datetime.datetime(dayto.year, dayto.month, dayto.day, 23 , 59 , 59 )
+	print '---' .join([ str (date_from), str (date_to)])
 
-'''
-def getMonth(d):
-   dayscount = datetime.timedelta(days = d.day)
-   dayto = d - dayscount
-   date_from = datetime.datetime(dayto.year, dayto.month, 1 , 0 , 0 , 0 )
-   date_to = datetime.datetime(dayto.year, dayto.month, dayto.day, 23 , 59 , 59 )
-   print '---' .join([ str (date_from), str (date_to)])
-'''
-
-
-# def date2ts(dt, convert_to_utc=False):
-#     '''
-#     Converts a datetime object to UNIX timestamp in milliseconds.
-#     '''
-#     if isinstance(dt, datetime.datetime):
-#         return dt.format
-#         if convert_to_utc: # 是否转化为UTC时间
-#             dt = dt + datetime.timedelta(hours=-8) # 中国默认时区
-#         timestamp = total_seconds(dt - EPOCH)
-#         return long(timestamp)
-#     return dt
-
-def ts2date(timestamp, convert_to_local=False):
-    ''' Converts UNIX timestamp to a datetime object. '''
-    if isinstance(timestamp, (int, long, float)):
-        dt = datetime.datetime.utcfromtimestamp(timestamp)
-        if convert_to_local: # 是否转化为本地时间
-            dt = dt + datetime.timedelta(hours=8) # 中国默认时区
-        return dt
-    return timestamp
-
-def getNow():
-    return datetime.datetime.now()
+def getNow(fmt=None):
+	rawDate = datetime.datetime.now()
+	if fmt:
+		return date2str(rawDate,fmt)
+	else:
+		return rawDate
 
 def getNowTs():
-    return date2ts(getNow())
+	return date2ts(getNow())
 
+'''
+interval<0
+get month before
+interval>0
+get month after
+'''
+def getMonth(interval):
+	dayscount = datetime.timedelta(days=abs(interval)*30)
+	# print dayscount,type(dayscount)
+	if interval>0:
+		dayto = getNow() + dayscount
+	else:
+		dayto = getNow() - dayscount
+	return dayto
+# datetime.datetime(dayto.year, dayto.month, 1 , 0 , 0 , 0 )
+
+
+def getMonthTS(interval):
+	return date2ts(getMonth(interval))
+
+def getMonthFirstDay(interval):
+	pass
+
+
+'''
+------------type trans------------
+'''
+
+def ts2date(timestamp, convert_to_local=False):
+	''' Converts UNIX timestamp to a datetime object. '''
+	if isinstance(timestamp, (int, long, float)):
+		dt = datetime.datetime.utcfromtimestamp(timestamp)
+	if convert_to_local: # 是否转化为本地时间
+		dt = dt + datetime.timedelta(hours=8) # 中国默认时区
+		return dt
+	return timestamp
 
 def str2date(date_str,fmt=YYYY_MM_DD_HH_MM_SS):
-    # return time.mktime(time.strptime(string, fmt))
-    return datetime.datetime.strptime(date_str, fmt)
+	# return time.mktime(time.strptime(string, fmt))
+	return datetime.datetime.strptime(date_str, fmt)
 # d = ts2date(1356587335)
 # print date2ts(d)
 
 def str2ts(dtStr,fmt=YYYY_MM_DD_HH_MM_SS):
-    timeArray = time.strptime(dtStr, fmt)
-    return int(time.mktime(timeArray))
+	timeArray = time.strptime(dtStr, fmt)
+	return int(time.mktime(timeArray))
 
 def date2str(dt,fmt=YYYY_MM_DD_HH_MM_SS):
-    return dt.strftime(fmt)
+	return dt.strftime(fmt)
 
 #date to timestamp
 def date2ts(dt):
-    # dtStr = date2str(dt)
-    return calendar.timegm(dt.utctimetuple())
+	return calendar.timegm(dt.utctimetuple())
 
 
-
-
-'''
-interval<0
-    get month before
-interval>0
-    get month after
-'''
-def getMonth(interval):
-    dayscount = datetime.timedelta(days=abs(interval)*30)
-    # print dayscount,type(dayscount)
-    if interval>0:
-        dayto = getNow() + dayscount
-    else:
-        dayto = getNow() - dayscount
-    return dayto
-    # datetime.datetime(dayto.year, dayto.month, 1 , 0 , 0 , 0 )
-
-
-def getMonthTS(interval):
-    return date2ts(getMonth(interval))
-
-def getMonthFirstDay(interval):
-    pass
 
 
 

@@ -5,10 +5,11 @@
 pip install sqlparse
 '''
 import sqlparse
-import util.log.logger as logger
+# import util.log.logger as logger
+# log = logger.Logger(loglevel=1, logger="stdout").getlog()
 
-log = logger.Logger(loglevel=1, logger="stdout").getlog()
-
+import util.log.logutil as logutil
+log = logutil.LogUtil.getStdLog()
 '''
 generate split table
 @param format

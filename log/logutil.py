@@ -8,6 +8,17 @@ logger = Logger(logname='out.log', loglevel=1, logger="fox").getlog()
 '''
 import logging
 
+class LogUtil(object):
+    logger=None
+    @staticmethod
+    def init():#self):
+        LogUtil.logger = Logger(loglevel=1, logger="stdout").getLog()
+    @staticmethod
+    def getStdLog():#self):
+        if not LogUtil.logger:
+            LogUtil.init()
+        return LogUtil.logger
+
 class Logger(object):
     leveln={1:logging.DEBUG,2:logging.INFO,3:logging.WARN,4:logging.ERROR}
     levels={'debug':logging.DEBUG,'info':logging.INFO,'warn':logging.WARN,'error':logging.ERROR}
@@ -35,8 +46,9 @@ class Logger(object):
         self.logger.addHandler(ch)
     def logLevelFormat(self,loglevel):
         return self.leveln.get(loglevel) if self.leveln.get(loglevel)!=None  else self.levels.get(loglevel)
-    def getlog(self):
+    def getLog(self):
         return self.logger
+
 
 # logger = Logger(loglevel=1, logger="fox").getlog()
 # logger.info('ahha')

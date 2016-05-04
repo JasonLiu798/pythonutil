@@ -2,7 +2,7 @@
 #-*- coding:utf-8 -*-
 
 import os,sys
-import pexpect
+# import pexpect
 # from pexpect import *
 
 def ssh_cmd(ip, user, passwd, cmd):
@@ -29,11 +29,14 @@ def ssh_cmd(ip, user, passwd, cmd):
     ssh.close()
     return r
 
+
+
+
 #name ip port user pass
-for host in hosts.split("\n"):
-    if host:
-        name, ip, port, user, passwd = host.split(" ")
-        cmds='df -h,uptime'
-        for cmd in cmds.split(","):
-            print "-- %s run:%s --" % (ip, cmd)
-            print ssh_cmd(ip, user, passwd, cmd)
+# for host in hosts.split("\n"):
+#     if host:
+#         name, ip, port, user, passwd = host.split(" ")
+#         cmds='df -h,uptime'
+#         for cmd in cmds.split(","):
+#             print "-- %s run:%s --" % (ip, cmd)
+#             print ssh_cmd(ip, user, passwd, cmd)

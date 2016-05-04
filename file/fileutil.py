@@ -3,16 +3,20 @@
 
 import re
 import sys,os
-import util.log.logger as logger
+# import util.log.logger as logger
 import util.common.stringutil as su
-log = logger.Logger(loglevel=1, logger="stdout").getlog()
+# log = logger.Logger(loglevel=1, logger="stdout").getlog()
+
+import util.log.logutil as logutil
+log = logutil.LogUtil.getStdLog()
+
 
 T_WR_APPEND='a'
 
-
-
 # def getSep(ost):
     # if ost
+
+
 
 #current dir
 def cur_file_dir():
@@ -24,20 +28,21 @@ def cur_file_dir():
      elif os.path.isfile(path):
          return os.path.dirname(path)
 
-def checkFile(file):
+def fileExist(file):
     if not exist(file):
-        raise Exception,'file not exist'
+        raise Exception,file+'file not exist'
     if not isFile(file):
-        raise Exception,'not a file'
+        raise Exception,file+'not a file'
 
-def checkDir(directory):
+def dirExist(directory):
     if not exist(directory):
-        raise Exception,'dir not exist'
-    if not isDir(file):
-        raise Exception,'not a dir'
+        return False #raise Exception,'dir not exist'
+    if not isDir(directory):
+        return False
+    return True #raise Exception,'not a dir'
 
 def read(file,otype='r',length=-1):
-    checkFile(file)
+    fileExist(file)
     file_object = open(file,otype)
     try:
         all_the_text = file_object.read()
@@ -75,9 +80,8 @@ def readSpecifiedByte(fileObject,byte):
     return content
 '''
 
-
 def getfd(file,otype='r'):
-    checkFile(file)
+    fileExist(file)
     file_object = open(file,otype)
     return file_object #don't forget close
 
@@ -95,11 +99,11 @@ def write(file,content,otype='w',length=-1):
 def readwrite(srcs,tgt):
     content=''
     if isinstance(srcs,str):
-        checkFile(srcs)
+        fileExist(srcs)
         content = read(srcs)
     elif isinstance(srcs,list):
         for s in srcs:
-            checkFile(s)
+            fileExist(s)
             content +=read(s)
     else:
         raise Exception,('srcs',srcs,'unknow type!')
@@ -157,8 +161,40 @@ def sshDataParser(file):
         res.append(tmp)
     return res
 
+def mkdir(dirpath):
+    if dirExist(dirpath):
+        return True
+    os.mkdir(dirpath)
+    return True
 
+'''
+get last os.sep
+example :
+    /aa/bb      return bb
+    /aa/bb/     return bb
+    aa/         return aa
+    /aa/bb///    return bb
+'''
+def getValueAfterLastSep(filepath):
+    res=''
+    if filepath and isinstance(filepath,str):
+        slen = len(filepath)
+        #remove last os.sep
+        tmpPath = filepath
+        while len(tmpPath)>0 and tmpPath[-1]==os.sep:
+            tmpPath=tmpPath[0:len(tmpPath)-1]
+        if slen<=1:
+            return res
+        # print 'after filter :',tmpPath
+        idx = tmpPath.rfind(os.sep)
+        # print 'idx',idx
+        if idx>=0:
+            res = tmpPath[idx+1:]
+        else:
+            res=tmpPath
+    return res
 
+# print 'res',getSepLast('/aa/bb///')
 
 '''
 filename='D:\\yp\\project\\shell\\share\\bashrc\\moba\\.bash_ssh'

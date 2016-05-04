@@ -2,7 +2,14 @@
 #-*- coding:utf-8 -*-
 
 import re
+import os
 
+'''
+string start with 'startstr'
+    return True
+not
+    return False
+'''
 def startWith(str,startstr):
     res = True
     if len(startstr)<=0:
@@ -16,9 +23,54 @@ def startWith(str,startstr):
     return res
 # print startWith('#abc','#')
 
+
+
+
+def removeLineSepInner(line):
+    CR="\r"
+    CRCL="\r\n"
+    CL="\n"
+    res=''
+    if line.rfind(os.linesep):
+        rstr = re.compile(os.linesep)
+        res = rstr.sub('',line)
+        # print 'inner:',line,'res:',res
+    '''
+    elif line.rfind(CR):
+        print 'CR'
+        res=line.replace(CR, '')
+    elif line.rfind(CL):
+        print 'CL'
+        res=line.replace(CL, '')
+    '''
+    return res
+
+
+'''
+remove \n \r \n\r
+'''
+def removeLineSep(line):
+    if isinstance(line,str):
+        res = removeLineSepInner(line)
+    elif isinstance(line,list):
+        res=[]
+        for l in line:
+            res.append(removeLineSepInner(l))
+    return res
+
+
+
+'''
+split by space
+'''
 def splitSpace(line):
     return re.split('\s',line)
 
+
+'''
+for command  expect
+add \\ in front of special character
+'''
 def addEscapingChar(inputstr):
     res=''
     for i in inputstr:
@@ -27,12 +79,18 @@ def addEscapingChar(inputstr):
         res+=i
     return res
 
+'''
+get / index
+'''
 def pathGetIdx(path):
     idx = path[::-1].find('/')
     if idx!=-1:
         return len(path)-idx
     return -1
-    # len(path)-
+
+'''
+
+'''
 def pathGetFile(path):
     idx = pathGetIdx(path)
     if idx!=-1:
