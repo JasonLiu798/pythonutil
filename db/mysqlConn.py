@@ -76,12 +76,13 @@ class Connection(object):
 
         self._db = None
         self._db_args = args
+        '''
         try:
             self.reconnect()
         except:
             logging.error("Cannot connect to MySQL on %s", self.host,
                           exc_info=True)
-
+        '''
     def __del__(self):
         self.close()
 
@@ -155,19 +156,27 @@ class Connection(object):
     def queryf(self,query,*parameters):
         return self.format(self.query(query,*parameters))
 
+
+    def batchQueryf(self,querys):
+        res=''
+        for q in querys:
+            res +=self.queryf(q)
+        return res
+
+
     def format(self,inputdata):
         res = ''
         # print inputdata
         if inputdata:
             if len(inputdata)>=1:
                 keys = inputdata[0].keys()
-                print 'keys',keys
+                #print 'keys',keys
                 maxLen = 0
                 for k in keys:
                     if len(k)>maxLen:
                         maxLen = len(k)
                 for d in inputdata:
-                    print 'data',d
+                    # print 'data',d
                     for k in d.keys():
                         content =  str(d.get(k))
                         if len(k)<maxLen:

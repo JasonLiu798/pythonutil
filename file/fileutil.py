@@ -13,10 +13,6 @@ log = logutil.LogUtil.getStdLog()
 
 T_WR_APPEND='a'
 
-# def getSep(ost):
-    # if ost
-
-
 
 #current dir
 def cur_file_dir():

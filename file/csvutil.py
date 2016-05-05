@@ -7,6 +7,8 @@ import util.common.systemutil as su
 # log = logger.Logger(loglevel=1, logger="stdout").getlog()
 import util.log.logutil as logutil
 log = logutil.LogUtil.getStdLog()
+# import util.log.logger as logger
+# log = logger.Logger(loglevel=1, logger="stdout").getlog()
 
 class Csvutil(object):
     filename=''

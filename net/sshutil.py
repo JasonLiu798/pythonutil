@@ -9,6 +9,9 @@ import util.common.systemutil as sysu
 
 import util.log.logutil as logutil
 log = logutil.LogUtil.getStdLog()
+import subprocess
+# import util.log.logger as logger
+# log = logger.Logger(loglevel=1, logger="stdout").getlog()
 
 '''
 if profile==None or filename==None:
@@ -36,18 +39,7 @@ def scpNP(localfile,uploadfile,user,host,port=22,idfile=None,direction=UP):
     # '''
     res = sysu.shellExec(cmd)
     return res
-    '''
-    p = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-    for line in p.stdout.readlines():
-        print line
-    retval = p.wait()
 
-    if retval!=0:
-        log.error('scp fail')
-        return False
-    else:
-        return True
-    '''
 
 '''
 execute ssh with out password
@@ -60,10 +52,28 @@ def sshNP(user,host,port=22,idfile=None,execmd=None):
     if execmd:
         cmd+="'"+execmd+"'"
     ret,datas = sysu.shellExec(cmd)
+    # ret,datas = shellExec(cmd)
     if ret:
         return datas
     else:
         return None
+
+'''
+batch execute sshNP
+'''
+def bssh(servers,execmd,nosrvKey=None):
+    res = {}
+    if servers:
+        for key in servers.keys():
+            if not isInList(nosrvKey,key):
+                server = servers.get(key)
+                # log.debug('serv %s ',server
+                output = sshNP(server['user'],server['ip'],server['port'],'~/.ssh/id_rsa.jianlong',execmd=execmd)
+                res[server['key']]=output
+            else:
+                log.info('srv %s not execute!' % key)
+    return res
+
 
 '''
 batch execute sshNP
