@@ -11,20 +11,25 @@ log = logutil.LogUtil.getStdLog()
 
 #(loglevel=1, logger="stdout").getlog()
 
+
+'''
+tar -cvf ...
+'''
+def tar_ccmd(tarfile,rawfile,show=False,execludes=[]):
+    tar_cmd(tarfile,rawfile,show,pack=True,rawexecludes=execludes)
+
+'''
+tar -xvf ...
+'''
+def tar_xcmd(tarfile,rawfile,show=False):
+    tar_cmd(tarfile,rawfile,show,pack=False)
+
 '''
 [root@www ~]# tar -jcv -f /root/etc.newer.then.passwd.tar.bz2 --newer-mtime="2008/09/29" /etc/*
 tar -zxvf xxx.tar.gz -C xxxx
 tar -zcvf xxx.tar.gz xxxx
 '''
-
-
-def tar_ccmd(tarfile,rawfile,show=False,execludes=[]):
-    tar_cmd(tarfile,rawfile,show,pack=True,rawexecludes=execludes)
-def tar_xcmd(tarfile,rawfile,show=False):
-    tar_cmd(tarfile,rawfile,show,pack=False)
-
-
-def tar_cmd(tarfile,rawfile,show=False,pack=False,rawexecludes=[]):
+def tar_cmd(tarfile,rawfile,show=False,pack=False,rawexecludes=[],debugSW=False):
     cmd='tar -z'
     if show:
         cmd+='v'
@@ -46,13 +51,13 @@ def tar_cmd(tarfile,rawfile,show=False,pack=False,rawexecludes=[]):
         for ex in rawexecludes:
             cmd+='--exclude '+ex+' '
     log.debug( 'tar cmd:\n' + cmd )
-    '''
-    ret,datas = sysu.shellExec(cmd)
+
+    ret,datas = sysu.shellExec(cmd,debugLog=debugSW)
     if ret:
         log.info('tar success ')
     else:
         log.info('tar fail ')
-    '''
+
 # files=['aaa','bbbb']
 # tar_cmd('a.tar.gz','aaa',show=True,pack=True)
 

@@ -28,7 +28,7 @@ def getOS():
     elif su.startWith(osname,MAC):
         return MAC
 
-def shellExec(cmd):
+def shellExec(cmd,debugLog=True):
     # log.info('exec: '+cmd)
     # print 'exec',cmd
     p = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
@@ -38,7 +38,8 @@ def shellExec(cmd):
         # print line
     retval = p.wait()
     log.info('ret:'+str(retval))
-    log.debug('res:'+str(lines))
+    if debugLog:
+        log.debug('res:'+str(lines))
     # for l in lines:
     #     log.info(l)
     if retval!=0:

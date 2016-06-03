@@ -6,7 +6,8 @@ sys.setdefaultencoding( "utf-8" )
 
 from mysqlConn import *
 import util.file.csvutil as cu
-class MysqlUtil(object):
+
+class MySQLUtil(object):
     pool=None
     def __init__(self):
         rawdata = cu.parseDb()
@@ -28,11 +29,11 @@ class MysqlUtil(object):
             res[rd['key']] = conn
         return res
 
-muIns = MysqlUtil()
+# muIns = MysqlUtil()
 # print muIns.pool
 # print muIns.profiles()
-conn = muIns.get('2423308')
+# conn = muIns.get('2423308')
 # print conn.queryf('select * from js_users_1 limit 10')
-print conn.batchQueryf(['select * from js_users_1 limit 1','select * from js_users_2 limit 1'])
+# print conn.batchQueryf(['select * from js_users_1 limit 1','select * from js_users_2 limit 1'])
 
 

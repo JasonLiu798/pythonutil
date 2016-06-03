@@ -19,10 +19,7 @@ class RedisUtil(object):
         return conn.getConn()
     def getProfils(self):
         return self.pool.keys()
-<<<<<<< HEAD
-=======
 
->>>>>>> e5c3bf28d877ad20339de4a8cda84efac4de56ed
 '''
 ruIns = RedisUtil()
 print ruIns.getProfils()
