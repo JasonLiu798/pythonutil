@@ -6,9 +6,9 @@ import os,sys
 # from pexpect import *
 
 def ssh_cmd(ip, user, passwd, cmd):
-    ssh = pexpect.spawn('ssh %s@%s "%s"' % (user, ip, cmd))
-    r=ssh.read()
-    print 'first',r
+    # ssh = pexpect.spawn('ssh %s@%s "%s"' % (user, ip, cmd))
+    # r=ssh.read()
+    # print 'first',r
     '''
     try:
         i = ssh.expect(['password: ', 'continue connecting (yes/no)?'])
@@ -26,8 +26,8 @@ def ssh_cmd(ip, user, passwd, cmd):
         r = ssh.read()
         ssh.close()
     '''
-    ssh.close()
-    return r
+    # ssh.close()
+    # return r
 
 
 

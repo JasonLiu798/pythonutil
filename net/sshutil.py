@@ -1,23 +1,14 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
 
+import sys
+reload(sys)
+sys.setdefaultencoding('utf8')
+
 import util.common.systemutil as sysu
-
-
-# import util.log.logger as logger
-# log = logger.Logger(loglevel=1, logger="stdout").getlog()
-
 import util.log.logutil as logutil
 log = logutil.LogUtil.getStdLog()
-import subprocess
-# import util.log.logger as logger
-# log = logger.Logger(loglevel=1, logger="stdout").getlog()
 
-'''
-if profile==None or filename==None:
-    usage()
-    sys.exit()
-'''
 UP='up'
 DOWN='down'
 
@@ -50,7 +41,7 @@ def sshNP(user,host,port=22,idfile=None,execmd=None):
     cmd+=addIdfile(idfile)
     cmd+=user+'@'+host+' '
     if execmd:
-        cmd+="'"+execmd+"'"
+        cmd+="\""+execmd+"\" 2>/dev/null"
     ret,datas = sysu.shellExec(cmd)
     # ret,datas = shellExec(cmd)
     if ret:
@@ -80,6 +71,8 @@ batch execute sshNP
 '''
 def bssh(servers,execmd,nosrvKey=None):
     res = {}
+    if not nosrvKey:
+        nosrvKey = []
     if servers:
         for key in servers.keys():
             if not isInList(nosrvKey,key):

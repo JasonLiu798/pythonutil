@@ -19,7 +19,6 @@ def day_get(d):
 	date_to = datetime.datetime(day.year, day.month, day.day, 23 , 59 , 59 )
 	print '---' .join([ str (date_from), str (date_to)])
 
-
 def week_get(d):
 	dayscount = datetime.timedelta(days = d.isoweekday())
 	dayto = d - dayscount

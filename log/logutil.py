@@ -6,6 +6,10 @@ log = Logger(logger="stdout",loglevel=1).getlog()
 logger = Logger(logname='out.log', loglevel=1, logger="fox").getlog()
 
 '''
+import sys
+reload(sys)
+sys.setdefaultencoding('utf8')
+
 import logging
 
 class LogUtil(object):
@@ -14,7 +18,7 @@ class LogUtil(object):
     def init():#self):
         LogUtil.logger = Logger(loglevel=1, logger="stdout").getLog()
     @staticmethod
-    def getStdLog():#self):
+    def getStdLog():
         if not LogUtil.logger:
             LogUtil.init()
         return LogUtil.logger

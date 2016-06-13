@@ -5,6 +5,7 @@ import platform
 import util.common.stringutil as su
 import subprocess
 
+
 import util.log.logutil as logutil
 log = logutil.LogUtil.getStdLog()
 
@@ -37,7 +38,8 @@ def shellExec(cmd,debugLog=True):
     # for line in p.stdout.readlines():
         # print line
     retval = p.wait()
-    log.info('ret:'+str(retval))
+    ret_log = 'ret:'+str(retval)
+    log.info(ret_log.decode("utf8"))
     if debugLog:
         log.debug('res:'+str(lines))
     # for l in lines:
