@@ -33,7 +33,6 @@ def getAbsPath(absParent,tags,attrName):
 tgtJsName = 'res.js'
 
 
-def
 
 if len(scripts)>1:
     absScripts = getAbsPath(absPath,scripts,'src')
