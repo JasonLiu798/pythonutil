@@ -1,39 +1,106 @@
 #!/usr/bin/env python
 
 ## Import(s) ##
-from BeautifulSoup import BeautifulSoup
+from bs4 import BeautifulSoup
 import util.file.fileutil as fu
-import util.string.stringutil as stringutil
+import util.string.stringutil as su
+import util.common.dateutil as du
 import os
 
+#absParentPath = 'D:\\project\\java\\aaa\\code\\dist\\'
+absModulePath = absParentPath+'module\\'
+absTgtPath = absParentPath+'merge\\'
 
-absPath = 'D:\\project\\java\\aos\\ui\\dist\\module\\'
-absHtmlPath = absPath+'index.html'
-absTgtHtmlPath = absPath+'index1.html'
+if fu.exist(absTgtPath):
+    fu.deleteDir(absTgtPath)
+
+fu.mkdir(absTgtPath)
+
+
+#source html
+absHtmlPath = absModulePath+'index.html'
+
+#target html
+absTgtHtmlPath = absTgtPath + 'index.html'
+absTgtJsPath = absTgtPath + 'main.js'
+# absTgtCssPath = absTgtPath + 'main.css'
 
 htmlContent = fu.read(absHtmlPath)
-#print htmlContent
 
-soup = BeautifulSoup(htmlContent)
-csses = soup.findAll('link')
+soup = BeautifulSoup(htmlContent, "html.parser")
 
-
+# csses = soup.findAll('link')
 scripts = soup.findAll('script')
-#print soup.prettify()
-#print scripts
+
 
 def getAbsPath(absParent,tags,attrName):
     res = []
     for t in tags:
-        rpath = stringutil.removeTagAfter(t[attrName],'?')
-        absPath = os.path.abspath(absParent + rpath)
+        rpath = su.removeTagAfter(t[attrName],'?')
+        absPath = fu.getAbsPath(absParent,rpath)
         res.append(absPath)
     return res
 
-tgtJsName = 'res.js'
+absScripts = getAbsPath(absModulePath,scripts,'src' )
+# absCss = getAbsPath(absModulePath,csses,'href' )
+
+
+def cpFiles(filePaths,tgt):
+    content = ''
+    for f in filePaths:
+        #print f
+        #fileName = su.getTagAfter(f,'\\')
+        #print 'tgtf:'+fileName
+        content += fu.read(f)
+    fu.write(tgt,content)
+
+# cpFiles(absHtmlPath,absTgtHtmlPath)
+
+cpFiles(absScripts,absTgtJsPath)
+# cpFiles(absCss,absTgtCssPath)
+
+
+[s.extract() for s in soup(['script','link'])]
+
+url = 'http://aa.com'
+
+
+version = du.getNow(du.MMDDHHMM)
+
+# newcss = soup.new_tag("link",href="http://.com/content/css?name=main&ver=0516")
+
+# newcss = soup.new_tag("link",href=url+"/content/getstyles?name=main&ver="+version,rel="stylesheet",type="text/css")
+
+
+# newcss = '<link rel="stylesheet" type="text/css" href="{0}" />'.format("http://10.118.12.118:1080/content/css?name=main&ver=0516")
+# print newcss
+
+
+# soup.head.append(newcss)
+
+# newscript = soup.new_tag("script",href="http://.com/content/js?name=main&ver=0516")
+
+newscript = soup.new_tag("script",src=url+"/content/getscript?name=main&ver="+version,type="text/javascript")
+# newscript = "<script type=\"text/javascript\" src=\"{0}\"/>".format("http://10.118.12.118:1080/content/js?name=main&ver=0516")
+#,type="text/javascript")
+print newscript
+soup.body.append(newscript)
+
+htmlContent = soup.prettify()
+htmlFmtContent = htmlContent.replace('amp;','')
+# for c in htmlContent:
+#     print 'raw '+c
+#     print 'after ' +c.replace('amp;','')
+#     htmlFmtContent += c.replace('amp;','')
+
+print 'res:'+htmlFmtContent
+fu.write(absTgtHtmlPath, htmlFmtContent)
 
 
 
+'''
+merge js
+'''
 if len(scripts)>1:
     absScripts = getAbsPath(absPath,scripts,'src')
     tgtScript = absPath+ tgtJsName
