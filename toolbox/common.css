@@ -1,0 +1,65 @@
+body {
+    font-family: "Microsoft YaHei" ;
+    font-size: 14px;
+    color: #444;
+}
+/*font-family: Helvetica Neue, Arial, sans-serif;*/
+.box {
+    padding:10px;
+}
+.boxline {
+    padding: 0px 10px 10px 10px;
+    margin: 10px;
+    border-style: solid;
+    border-width: 1px;
+}
+textarea{
+    height:100px;
+    width:200px;
+}
+
+
+.bold {
+    font-weight: bold;
+}
+
+.page-content {
+    background-color: #FFF;
+    position: relative;
+    margin: 0;
+    padding: 8px 20px 24px;
+}
+
+.inputbox {
+    margin-left:10px;
+    margin-right:10px;
+}
+
+.resultbox {
+    margin-top: 10px;
+    margin-left:10px;
+}
+
+/*.input-group{*/
+    /*padding-top: 10px;*/
+/*}*/
+
+.oneline {
+    /*    padding-top:10px;*/
+    padding-bottom: 10px;
+}
+
+.sidebar {
+    width: 190px;
+    float: left;
+    position: static;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.displaynone{
+    display: none;
+}
+
+
+
