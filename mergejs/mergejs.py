@@ -7,7 +7,10 @@ import util.string.stringutil as su
 import util.common.dateutil as du
 import os
 
-#absParentPath = 'D:\\project\\java\\aaa\\code\\dist\\'
+# url = 'http://10.118.12.153:1080'
+url = 'http://aa.com'
+
+absParentPath = 'D:\\project\\java\\esg-aos-core-ui\\code\\dist\\'
 absModulePath = absParentPath+'module\\'
 absTgtPath = absParentPath+'merge\\'
 
@@ -29,9 +32,7 @@ htmlContent = fu.read(absHtmlPath)
 
 soup = BeautifulSoup(htmlContent, "html.parser")
 
-# csses = soup.findAll('link')
 scripts = soup.findAll('script')
-
 
 def getAbsPath(absParent,tags,attrName):
     res = []
@@ -42,8 +43,7 @@ def getAbsPath(absParent,tags,attrName):
     return res
 
 absScripts = getAbsPath(absModulePath,scripts,'src' )
-# absCss = getAbsPath(absModulePath,csses,'href' )
-
+print 'src abs script:',absScripts
 
 def cpFiles(filePaths,tgt):
     content = ''
@@ -57,12 +57,8 @@ def cpFiles(filePaths,tgt):
 # cpFiles(absHtmlPath,absTgtHtmlPath)
 
 cpFiles(absScripts,absTgtJsPath)
-# cpFiles(absCss,absTgtCssPath)
-
 
 [s.extract() for s in soup(['script','link'])]
-
-url = 'http://aa.com'
 
 
 version = du.getNow(du.MMDDHHMM)

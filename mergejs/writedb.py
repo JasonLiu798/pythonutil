@@ -6,7 +6,7 @@ import util.file.fileutil as fu
 import urllib
 
 
-absParentPath = 'D:\\project\\java\\e-ui\\code\\dist\\merge\\'
+absParentPath = 'D:\\project\\aa'
 
 
 # dbIns = MySQLUtil('sit','cn:3306','','at','passwd123')

@@ -30,9 +30,17 @@ textarea{
     padding: 8px 20px 24px;
 }
 
+.tabbox {
+    margin-top:10px;
+    margin-left:0px;
+    margin-right:5px;
+}
+
+
 .inputbox {
+    /*margin-top:10px; */
     margin-left:10px;
-    margin-right:10px;
+    margin-right:5px;
 }
 
 .resultbox {

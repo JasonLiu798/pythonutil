@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>工具箱</title>
-    <link rel="stylesheet" href="bootstrap.min.css">
+    <link rel="stylesheet" href="../../../js/lib/bootstrap.min.css">
     <link rel="stylesheet" href="common.css">
     <fontbase family="Microsoft YaHei">
 </head>
@@ -17,62 +17,98 @@
     </div>
 </div>
 
+<div class="row tabbox">
+<div class="col-sm-12">
+<div class="panel panel-primary ">
+<div class="panel-heading">Servers</div>
+<div class="panel-body">
+    <div class="inputbox">
+        <form class="form-inline">
+            <div class="row oneline">
+                <div class="input-group">
+                    <div class="input-group-addon">server</div>
+                    <select v-model="main.srv" class="form-control" @change="changeSrv">
+                <option v-for="option in servs" :value="option.value" >
+                    {{ option.text }}
+                </option>
+            </select>
+
+                </div>
+            </div>
+        </form>
+    </div>
+</div><!-- pannel body -->
+</div><!-- panel panel-primary-->
+</div><!-- col-sm-12-->
+</div><!-- row tabbox -->
+
+<ul id="myTab" class="nav nav-tabs">
+    <li class="active"><a href="#biz" data-toggle="tab">biz</a></li>
+    <li><a href="#codec" data-toggle="tab">codec</a></li>
+    <li><a href="#pub" data-toggle="tab">pub</a></li>
+</ul>
+<div id="myTabContent" class="tab-content">
+
+<!-- tab biz -->
+<div class="tab-pane fade in active" id="biz">
 <!-- timestamp -->
-<div class="row">
+<div class="row tabbox">
 <div class="col-sm-12">
 <div class="panel panel-primary">
 <div class="panel-heading">timestamp</div>
 <div class="panel-body inputbox">
     <form class="form-inline">
-        <div class="row oneline">
+        <div class="row oneline"><!-- ts 2 bj-->
             <div class="input-group">
                 <div class="input-group-addon">unix时间戳</div>
-                <input type="text" v-model="unixts" class="form-control"/>
-            </div>
-            <div class="input-group">
-                <div class="input-group-addon">北京时间</div>
-                <input type="text" v-model="bjtime" class="form-control">
+                <input type="text" v-model="timeObj.unix2bj.unixts" class="form-control"/>
             </div>
             <button @click="tranbj" class="btn btn-info" type="button">转成北京时间</button>
+            <div class="input-group">
+                <div class="input-group-addon">北京时间</div>
+                <input type="text" v-model="timeObj.unix2bj.bjtime" class="form-control">
+            </div>
         </div>
 
         <div class="row oneline">
             <div class="input-group">
                 <div class="input-group-addon">北京时间</div>
-                <input type="text" v-model="bjyear" class="form-control"/><div class="input-group-addon">年</div>
+                <input type="text" v-model="timeObj.bj2unix.bjyear" class="form-control"/><div class="input-group-addon">年</div>
             </div>
             <div class="input-group">
-                <input type="text" v-model="bjmonth" class="form-control"/>
+                <input type="text" v-model="timeObj.bj2unix.bjmonth" class="form-control"/>
                 <div class="input-group-addon">月</div>
             </div>
 
             <div class="input-group">
-                <input type="text" v-model="bjday" class="form-control"/>
+                <input type="text" v-model="timeObj.bj2unix.bjday" class="form-control"/>
                 <div class="input-group-addon">日</div>
             </div>
-
+        </div>
+        <div class="row oneline">
             <div class="input-group">
-                <input type="text" v-model="bjhour" class="form-control"/>
+                <input type="text" v-model="timeObj.bj2unix.bjhour" class="form-control"/>
                 <div class="input-group-addon">时</div>
             </div>
             <div class="input-group">
-                <input type="text" v-model="bjmin" class="form-control"/>
+                <input type="text" v-model="timeObj.bj2unix.bjmin" class="form-control"/>
                 <div class="input-group-addon">分</div>
             </div>
 
             <div class="input-group">
-                <input type="text" v-model="bjsec" class="form-control"/>
+                <input type="text" v-model="timeObj.bj2unix.bjsec" class="form-control"/>
                 <div class="input-group-addon">秒</div>
             </div>
             <button type="button" @click="trants" class="btn btn-info" type="button">转成ts</button>
             <div class="input-group">
-                <select v-model="tranststp" class="form-control">
-                    <option v-for="option in transopts" v-bind:value="option.value">{{ option.text }}
+                <div class="input-group-addon">粒度</div>
+                <select v-model="timeObj.bj2unix.tranststp" class="form-control">
+                    <option v-for="option in timeObj.bj2unix.transopts" v-bind:value="option.value">{{ option.text }}
                     </option>
                 </select>
             </div>
             <div class="input-group">
-                <input type="text" v-model="resunixts" class="form-control" /><div class="input-group-addon">秒</div>
+                <input type="text" v-model="timeObj.bj2unix.resunixts" class="form-control" /><div class="input-group-addon">秒</div>
             </div>
         </div>
     </form>
@@ -82,7 +118,7 @@
 </div><!-- row -->
 
 <!-- ajax request -->
-<div class="row">
+<div class="row tabbox">
 <div class="col-sm-6">
 <div class="panel panel-primary">
 <div class="panel-heading">ajaxRequest</div>
@@ -106,10 +142,8 @@
     <div class="row oneline">
         <div class="input-group">
             <label for="aparam">param</label>
-            <textarea id="aparam" v-model="ajaxReq.param" class="form-control" rows="3"></textarea>
+            <textarea id="aparam" v-model="ajaxReq.param" class="form-control" rows="4" cols="60"></textarea>
         </div>
-
-
     </div>
     <div class="resultbox">
     {{ ajaxReq.res }}
@@ -117,7 +151,92 @@
 </form>
 </div>
 </div>
+</div><!-- end of col -->
+</div><!-- end of row -->
+</div><!-- end of tab -->
+
+
+
+<!-- tab codec -->
+<div class="tab-pane fade" id="codec">
+<div class="row tabbox">
+<div class="col-sm-6"><!-- col url decode/encode-->
+<div class="panel panel-primary">
+<div class="panel-heading">url decode/encode</div>
+<div class="panel-body inputbox">
+<form class="form-inline">
+    <div class="row oneline">
+        <label for="url.inputstr">url</label>
+        <textarea id="url.inputstr" v-model="url.inputstr"class="form-control" rows="2" cols="60"></textarea>
+    </div>
+    <div class="row oneline">
+        <button type="button" @click="codecurl('D')" class="btn btn-info" type="button">decode</button>
+        <button type="button" @click="codecurl('E')" class="btn btn-info" type="button">encode</button>
+    </div>
+</form>
+</div><!-- panel body -->
+</div><!-- panel -->
+</div><!-- end of col -->
+
+<div class="col-sm-6"><!-- col unicode decode/encode-->
+<div class="panel panel-primary">
+<div class="panel-heading">unicode decode/encode</div>
+<div class="panel-body inputbox">
+<form class="form-inline">
+    <div class="row oneline">
+        <label for="unicodeCodec.inputstr">str</label>
+        <textarea id="unicodeCodec.inputstr" v-model="unicodeCodec.inputstr"class="form-control" rows="2" cols="60"></textarea>
+    </div>
+    <div class="row oneline">
+        <button type="button" @click="codecunicode('D')" class="btn btn-info" type="button">decode</button>
+        <button type="button" @click="codecunicode('E')" class="btn btn-info" type="button">encode</button>
+    </div>
+</form>
+</div><!-- panel body -->
+</div><!-- panel -->
+</div><!-- end of col -->
+
+</div><!-- end of row -->
+</div><!-- end of tab-->
+
+<!-- tab pub -->
+<div class="tab-pane fade" id="pub">
+<!-- 发布html -->
+<div class="row tabbox">
+<div class="col-sm-6">
+<div class="panel panel-primary">
+<div class="panel-heading">发布html</div>
+<div class="panel-body inputbox">
+<form class="form-inline">
+    <div class="row oneline"> 发布{{ urls.pub }}</br>
+    回滚 {{ urls.rbHtml }} </div>
+    <div class="row oneline">
+        <div class="input-group">
+            <div class="input-group-addon">Force</div>
+            <select v-model="pubhtml.type" class="form-control">
+                <option v-for="option in commonYN" v-bind:value="option.value">
+                    {{ option.text }}
+                </option>
+            </select>
+        </div>
+        <div class="input-group">
+            <div class="input-group-addon">oldversion</div><input type="text" v-model="pubhtml.oldversion" class="form-control" />
+        </div>
+    </div>
+    <div class="row oneline">
+        <button type="button" @click="pubHtml" class="btn btn-info" type="button">发布</button>
+        <button type="button" @click="rollbackHtml" class="btn btn-info" type="button">回滚</button>
+    </div>
+    <div class="row oneline">
+        <label for="newHtml">html</label>
+        <textarea id="newHtml" v-model="pubhtml.newHtmlContent"class="form-control" rows="8" cols="70" ></textarea>
+    </div>
+    <div class="row oneline">发布结果 {{ pubhtml.pubRes }}
+    </div>
+</form>
 </div>
+</div>
+</div><!-- end of col -->
 
 <!--更新静态文件 -->
 <div class="col-sm-6">
@@ -125,12 +244,12 @@
 <div class="panel-heading">更新静态文件</div>
 <div class="panel-body inputbox">
 <form class="form-inline">
+    <div class="row oneline"> 地址 {{ urls.updFile }} </div>
     <div class="row oneline">
         <div class="input-group">
             <div class="input-group-addon">文件</div>
             <input type="file" id="fileInput" class="form-control"/>
         </div>
-
     </div>
     <div class="row oneline">
         <div class="input-group">
@@ -151,284 +270,255 @@
         </div>
          <button type="button" @click="updfile"  class="btn btn-info" type="button">更新</button>
     </div>
+    <div class="row oneline">
+        {{ filemate.res }}
+    </div>
 </form>
 </div>
 </div><!-- panel -->
-</div>
-</div><!-- row -->
-
-<!-- 发布html -->
-<div class="row">
-<div class="col-sm-6">
-<div class="panel panel-primary">
-<div class="panel-heading">发布html</div>
-<div class="panel-body inputbox">
-<form class="form-inline">
-    <div class="row oneline">
-        <div>发布结果 {{ pubhtml.pubRes }}
-        </div>
-        <div class="input-group">
-            <div class="input-group-addon">Force</div>
-            <select v-model="pubhtml.type" class="form-control">
-                <option v-for="option in commonYN" v-bind:value="option.value">
-                    {{ option.text }}
-                </option>
-            </select>
-        </div>
-        <div class="input-group">
-            <div class="input-group-addon">oldversion</div><input type="text" v-model="pubhtml.oldversion" class="form-control" />
-        </div>
-
-    </div>
-    <div class="row oneline">
-        <button type="button" @click="pubHtml" class="btn btn-info" type="button">发布</button>
-        <button type="button" @click="rollbackHtml" class="btn btn-info" type="button">回滚</button>
-    </div>
-    <div>
-        <label for="newHtml">html</label>
-        <textarea id="newHtml" v-model="pubhtml.newHtmlContent"class="form-control" rows="5" ></textarea>
-    </div>
-</form>
-</div><!-- panel body-->
-</div><!-- panel -->
-</div><!-- col -->
 </div><!--row -->
+</div><!-- row -->
+</div>
 
 </div><!-- container -->
 </div>
 </body>
 
-<script src="jquery-3.2.1.js"></script>
-<script src="bootstrap.min.js"></script>
-<script src="vue.min.js"></script>
+<script src="../../../js/lib/jquery-3.2.1.js"></script>
+<script src="../../../js/lib/bootstrap.min.js"></script>
+<script src="../../../js/lib/vue.min.js"></script>
 <script src="tool.js"></script>
-<!--<script src="jquery.min.js"></script>-->
+<script src="constant.js"></script>
 
 <script>
-    var srv = 'http://10.118.12.118:1080';
-   
+"use strict";
 
-    var uploadFile = srv+'/contentmgr/updfile';
-    var putHtmlUrl = srv+ '/contentmgr/pub';
-    var rollbackHtmlUrl = srv+ '/contentmgr/rollback';
+$(function(){
+    $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+        let activeTab = $(e.target).text();
+        let previousTab = $(e.relatedTarget).text();
+        $(".active-tab span").html(activeTab);
+        $(".previous-tab span").html(previousTab);
+    });
+});
 
-    var prjurl = srv+'/aa/getlist';
-    var dfturl = srv+'/aa/get';
+let HTTP= 'http://';
+let srvs = [ {text:'dev',value:'10.118.12.153:1080'},{text:'sit',value:'test.com'},{text:'stg',value:'test.com'},{text:'prd',value:'test.com'} ];
 
-    var typeUrl = {
-        "prj":{
-            "url":srv+'/aa/get',
-            "param":{"prjId":"0ee90a1f-3ab3-11e7-b035-a0369fa542fb"}
-        },
-        "prjs":{
-            "url":srv+'/aa/getlist',
-            "param":{"prjStatus":"U"}
-        },
-        "points":{
-            "url":srv+'/aa/getlist',
-            "param":{"prjId":"f8b45aa5-3a1f-11e7-b035-a0369fa542fb" }
-        }
+let srv = HTTP+ srvs[0].value;
+
+let typeUrl = {
+    "prj":{
+        "url":srv+'/aa/get',
+        "param":{"prjId":"0ee90a1f-3ab3-11e7-b035-a0369fa542fb"}
+    },
+    "prjs":{
+        "url":srv+'/aa/getlist',
+        "param":{"prjStatus":"U"}
+    },
+    "points":{
+        "url":srv+'/aa/getlist',
+        "param":{"prjId":"f8b45aa5-3a1f-11e7-b035-a0369fa542fb" }
     }
+};
+let urlParts = {updFile:'/contentmgr/upd',pub:'/contentmgr/pub',rbHtml:'/contentmgr/rollback'};
 
-    var dfttranstp = 's';
-    var nowDate = new Date();
-    var nowts = parseInt(nowDate.getTime()/1000);
-    var nowYear = nowDate.getFullYear();
-    var nowMonth = nowDate.getMonth()+1;
-    var nowDay = nowDate.getDate();
-    var nowHour = nowDate.getHours();
-    var nowMin = nowDate.getMinutes();
-    var nowSec = nowDate.getSeconds();
-
-    var app = new Vue({
-        el: "#app",
-        data: {
-            filemate:{"type":"J","name":"main","version":"0517"},
-            ajaxReq:{"inftype":'prj',"url":typeUrl['prj'].url ,"param": JSON.stringify(typeUrl['prj'].param) ,"res":''},
-            inftypes:[
-                {text:'prjs',value:'prjs'},
-                {text:'prj',value:'prj'},
-                {text:'points',value:'points'}
-            ],
-            commonYN:[{text:'第一次',value:'Y'},{text:'非第一次',value:'N'}],
-
-            //unix -> bj
-            unixts: nowts,
-            bjtime: '',
-            //bj -> unix
-            bjyear: nowYear,
-            bjmonth: nowMonth,
-            bjday: nowDay,
-            bjhour: nowHour,
-            bjmin: nowMin,
-            bjsec: nowSec,
-            resunixts: 0,
-
-            transopts:[
-                {text:'year',value:'y'},
-                {text:'month',value:'m'},
-                {text:'day',value:'d'},
-                {text:'hour',value:'h'},
-                {text:'min',value:'min'},
-                {text:'second',value:'s'}
-            ],
-
-            pubType:[
-                {text:'JS',value:'J'},
-                {text:'CSS',value:'C'},
-                {text:'HTML',value:'H'}
-            ],
-
-            pubhtml:{
-                "pubhtml": '', "oldversion":'' , "pubRes":''
-            },
-            oldversion:'',
-
-            tranststp: dfttranstp
+let app = new Vue({
+    el: "#app",
+    data: {
+        filemate:{type:"J",name:"main",version: nowts, res:'' },
+        ajaxReq:{"inftype":'prj',"url":typeUrl['prj'].url ,"param": JSON.stringify(typeUrl['prj'].param) ,"res":''},
+        servs:srvs,
+        main:{srv:''},//环境选择区
+        urls:{updFile:'',pub:'',rbHtml:''},
+        inftypes:[
+            {text:'prjs',value:'prjs'}, {text:'prj',value:'prj'}, {text:'points',value:'points'}
+        ],
+        commonYN:[{text:'第一次',value:'Y'},{text:'非第一次',value:'N'}],
+        //unix -> bj
+        timeObj: {
+            unix2bj:{"unixts":nowts,"bjtime":''},
+            bj2unix:{
+                bjyear: nowYear,
+                bjmonth: nowMonth,
+                bjday: nowDay,
+                bjhour: nowHour,
+                bjmin: nowMin,
+                bjsec: nowSec,
+                tranststp: dfttranstp,
+                resunixts: 0,
+                transopts:[
+                    {text:'year',value:'y'}, {text:'month',value:'m'}, {text:'day',value:'d'}, {text:'hour',value:'h'}, {text:'min',value:'min'}, {text:'second',value:'s'}
+                ],
+            }
         },
-        created:function () {
-            this.resunixts =  datestr2ts(this.bjyear,this.bjmonth,this.bjday,
-                    this.bjhour,this.bjmin,this.bjsec);
-            this.bjtime = ts2date(this.unixts);
+        pubType:[
+            {text:'JS',value:'J'},
+            {text:'CSS',value:'C'},
+            {text:'HTML',value:'H'}
+        ],
+        pubhtml:{
+            "pubhtml": '', "oldversion":'' , "pubRes":''
         },
-        methods: {
-            tranbj:function () {
-                console.log('ts:'+this.unixts);
-                //var res = new Date(this.unixts).toLocaleString();
-                this.bjtime = ts2date(this.unixts);
-            },
-            trants:function () {
-                var y = this.bjyear;
-                var m = this.bjmonth;
-                var d = this.bjday;
-                var h = this.bjhour;
-                var min = this.bjmin;
-                var s = this.bjsec;
-                switch (this.tranststp){
-                    case 'y':
-                        m = 1;
-                    case 'm':
-                        d = 1;
-                    case 'd':
-                        h = 0;
-                    case 'h':
-                        min = 0;
-                    case 'min':
-                        s = 0;
-                        break;
-                }
-                var res = datestr2ts(y,m,d,h,min,s);
-                this.resunixts = res;
-            },
+        url:{ "inputstr": '' },
+        unicodeCodec:{ "inputstr": '' }
+    },
+    created:function () {
+        this.timeObj.unix2bj.bjtime = ts2date(this.timeObj.unix2bj.unixts);
+        this.timeObj.bj2unix.resunixts =  datestr2ts(this.timeObj.bj2unix.bjyear,this.timeObj.bj2unix.bjmonth,this.timeObj.bj2unix.bjday,this.timeObj.bj2unix.bjhour,this.timeObj.bj2unix.bjmin,this.timeObj.bj2unix.bjsec);
+        this.main.srv = srvs[0].value;
+        this.urls.updFile = HTTP+ this.main.srv+ urlParts.updFile;
+        this.urls.pub = HTTP+ this.main.srv + urlParts.pub;
+        this.urls.rbHtml = HTTP+ this.main.srv + urlParts.rbHtml;
+    },
+    methods: {
+        tranbj:function () {//ts 2 bj
+            this.timeObj.unix2bj.bjtime = ts2date(this.timeObj.unix2bj.unixts);
+        },
+        trants:function () {//bj 2 unix ts
+            let y = this.timeObj.bj2unix.bjyear;
+            let m = this.timeObj.bj2unix.bjmonth;
+            let d = this.timeObj.bj2unix.bjday;
+            let h = this.timeObj.bj2unix.bjhour;
+            let min = this.timeObj.bj2unix.bjmin;
+            let s = this.timeObj.bj2unix.bjsec;
+            switch (this.timeObj.bj2unix.tranststp){
+                case 'y':
+                    m = 1;
+                case 'm':
+                    d = 1;
+                case 'd':
+                    h = 0;
+                case 'h':
+                    min = 0;
+                case 'min':
+                    s = 0;
+                    break;
+            }
+            let res = datestr2ts(y,m,d,h,min,s);
+            this.timeObj.bj2unix.resunixts = res;
+        },
 
-            //ajax sim
-            simajax: function () {
-                console.log('req url '+this.ajaxReq.url+',param '+this.ajaxReq.param );
-                $.ajax({
-                    type: "post",
-                    url: this.ajaxReq.url,
-                    contentType: "application/json;charset=utf-8",
-                    data: this.ajaxReq.param,
-                    dataType: "json",
-                    crossDomain: true,
-                    xhrFields: {
-                        withCredentials: true
-                    },
-                    success: function (data) {
-                        console.log('res:'+ JSON.stringify(data));
-                        this.ajaxReq.res = JSON.stringify(data);
-                    }.bind(this),
-                    error: function (data) {
-                        this.ajaxReq.res = data;
-                    }.bind(this)
-                });
-            },
-            changeInf: function(){
-                console.log('change '+this.ajaxReq.inftype);
-                this.ajaxReq.param = JSON.stringify( typeUrl[ this.ajaxReq.inftype ].param);
-                this.ajaxReq.url = typeUrl[ this.ajaxReq.inftype ].url;
-            },
+        //ajax sim
+        simajax: function () {
+            console.log('req url '+this.ajaxReq.url+',param '+this.ajaxReq.param );
+            $.ajax({
+                type: "POST",
+                url: this.ajaxReq.url,
+                contentType: "application/json;charset=utf-8",
+                data: this.ajaxReq.param,
+                dataType: "json",
+                crossDomain: true,
+                xhrFields: { withCredentials: true },
+                success: function (data) {
+                    console.log('res:'+ JSON.stringify(data));
+                    this.ajaxReq.res = JSON.stringify(data);
+                }.bind(this),
+                error: function (data) {
+                    this.ajaxReq.res = data;
+                }.bind(this)
+            });
+        },
+        cancelajax: function () {
+            this.aurl = dfturl;
+            this.aparam = '';
+        },
 
-            updfile: function(){
-                var formData = new FormData();
-                //console.log('content '+$("#fileInput")[0].files[0]);
-                formData.append("fileInput", $("#fileInput")[0].files[0]);
-                formData.append("type",this.filemate.type);
-                formData.append("name",this.filemate.name);
-                formData.append("version",this.filemate.version);
+        changeInf: function(){
+            console.log('change '+this.ajaxReq.inftype);
+            this.ajaxReq.param = JSON.stringify( typeUrl[ this.ajaxReq.inftype ].param);
+            this.ajaxReq.url = typeUrl[ this.ajaxReq.inftype ].url;
+        },
+        changeSrv: function(){
+            console.log('change srv '+this.main.srv );
+            this.urls.updFile = HTTP+ this.main.srv+ urlParts.updFile;
+            this.urls.pub = HTTP+ this.main.srv + urlParts.pub;
+            this.urls.rbHtml = HTTP+ this.main.srv + urlParts.rbHtml;
+        },
 
+        //upload file ajax,crossdomain
+        updfile: function(){
+            let formData = new FormData();
+            formData.append("fileInput",$("#fileInput")[0].files[0]);
+            formData.append("type",this.filemate.type);
+            formData.append("name",this.filemate.name);
+            formData.append("version",this.filemate.version);
+            console.log('filemate:'+ formData );
+            $.ajax({
+                type: "POST",
+                url: uploadFile,
+                processData: false,
+                contentType: false,
+                crossDomain: true,
+                xhrFields: { withCredentials: true },
+                data: formData,
+                beforeSend:function(){
+                    this.filemate.res = "正在进行，请稍候";
+                }.bind(this),
+                success: function (data) {
+                    this.filemate.res = data.msg;
+                }.bind(this),
+                error: function (data) {
+                    this.filemate.res = '失败：' + data;
+                }.bind(this)
+            });
+        },
+        //发布html
+        pubHtml:function(){
+            let updContent = {
+                "content": this.pubhtml.newHtmlContent,
+                "isFirst": this.pubhtml.type
+            };
+            console.log('pub html '+JSON.stringify(updContent) );
+            $.ajax({
+                type: "POST",
+                url: this.urls.updFile,
+                data: updContent,
+                crossDomain: true,
+                xhrFields: { withCredentials: true },
+                success: function (data) {
+                    this.pubhtml.pubRes = JSON.stringify(data);
+                }.bind(this),
+                error: function (data) {
+                    this.pubhtml.pubRes = JSON.stringify(data);
+                }.bind(this)
+            });
+        },
+        //回滚 js
+        rollbackHtml:function(){
+            $.ajax({
+                type: "post",
+                url: rollbackHtmlUrl,
+                crossDomain: true,
+                xhrFields: { withCredentials: true },
+                data: { "content": this.pubhtml.oldversion },
+                success: function (data) {
+                    console.log('res:'+ JSON.stringify(data));
+                    this.pubhtml.pubRes = JSON.stringify(data);
+                }.bind(this),
+                error: function (data) {
+                    this.ares = 'fail:' + data;
+                }.bind(this)
+            });
+        },
 
-                console.log('filemate:'+ formData );
-                $.ajax({
-                    type: "POST",
-                    url: uploadFile,
-                    cache: false,
-                    processData: false,
-                    contentType: false,
-                    crossDomain: true,
-                    xhrFields: {
-                        withCredentials: true
-                    },
-                    //enctype: 'multipart/form-data',
-                    data: formData,
-                    beforeSend:function(){
-                        console.log("正在进行，请稍候");
-                    },
-                    success: function (data) {
-                        console.log('res:'+ JSON.stringify(data));
-                    }.bind(this),
-                    error: function (data) {
-                        this.ares = 'fail:' + data;
-                    }.bind(this)
-                });
-            },
-            cancelajax: function () {
-                this.aurl = dfturl;
-                this.aparam = '';
-            },
-
-            //发布html
-            pubHtml:function(){
-                var updContent = {
-                    "content": this.pubhtml.newHtmlContent,
-                    "isFirst": this.pubhtml.type
-                };
-                console.log('pub html '+JSON.stringify(updContent) );
-                $.ajax({
-                    type: "POST",
-                    url: putHtmlUrl,
-                    //cache: false,
-                    data: updContent,
-                    crossDomain: true,
-                    xhrFields: { withCredentials: true },
-                    success: function (data) {
-                        console.log('succ:'+ JSON.stringify(data));
-                        this.pubhtml.pubRes = JSON.stringify(data);
-                    }.bind(this),
-                    error: function (data) {
-                        console.log('fail:'+ JSON.stringify(data));
-                        this.pubhtml.pubRes = JSON.stringify(data);
-                    }.bind(this)
-                });
-            },
-            rollbackHtml:function(){
-                $.ajax({
-                    type: "post",
-                    url: rollbackHtmlUrl,
-                    crossDomain: true,
-                    xhrFields: { withCredentials: true },
-                    data: { "content": this.pubhtml.oldversion },
-                    success: function (data) {
-                        console.log('res:'+ JSON.stringify(data));
-                        this.pubhtml.pubRes = JSON.stringify(data);
-                    }.bind(this),
-                    error: function (data) {
-                        this.ares = 'fail:' + data;
-                    }.bind(this)
-                });
+        // codec/decodes
+        codecurl:function(ctype){//url encode/decode
+            if (ctype === "D"){
+                this.url.inputstr=decodeURI(this.url.inputstr);
+            }else{
+                this.url.inputstr=encodeURI(this.url.inputstr);
+            }
+        },
+        codecunicode:function(ctype){//unicode de/en code
+            if (ctype === "D"){
+                this.unicodeCodec.inputstr=decToHex(this.unicodeCodec.inputstr);
+            }else{
+                this.unicodeCodec.inputstr=hexToDec(this.unicodeCodec.inputstr);
             }
         }
-    });
+    }
+});
 
 
 </script>
